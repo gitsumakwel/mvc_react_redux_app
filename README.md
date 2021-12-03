@@ -4,10 +4,10 @@ structures and connections in the application
 
 
 ### `./src/index.js`
-|_renders:
-|________./router/routes.js as <Routerx/>
+  |_renders:
+  |________./router/routes.js as <Routerx/>
 
-  ### `./src/router/routes.js`
+### `./src/router/routes.js`
   |_connects redux store to react pages: <Provider store={store}>
   |_connects global state and redux dispatch to react pages: connect(mapStateToProps,mapDispatchToProps)(PAGE)
   |_setup routes to pages

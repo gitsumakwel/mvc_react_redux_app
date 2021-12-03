@@ -1,6 +1,6 @@
 
 ##Structures of the app
-structures and connections in the application
+    structures and connections in the application
 
 
 ### `./src/index.js`

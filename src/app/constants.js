@@ -1,0 +1,13 @@
+const COURSEWORX = 'COURSEWORX';
+const ABOUT = 'ABOUT';
+const PROJECT = 'PROJECT';
+const BLOG = 'BLOG';
+const CONTACT = 'CONTACT';
+
+export {
+  COURSEWORX,
+  ABOUT,
+  PROJECT,
+  BLOG,
+  CONTACT,
+}

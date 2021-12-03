@@ -1,5 +1,5 @@
 
-##Structures of the app
+## `Structures of the app`
     structures and connections in the application
 
 
@@ -30,8 +30,24 @@
     |_declares the actions to be use by reducer.js and routes.js
     |_implemented by store (background)
     |__________how: use dispatch from mapDispatchToProps
-    |__________     -> action will return an object -> store will read this object
-    |__________     -> reducer will handle the value -> stored in state
+    |__________     -> action will return an object
+    |__________     -> store will read this object
+    |__________     -> reducer will handle the value and should return a new state or old state (can be partial)
+    |__________     -> stored in state
     |__________connect to your page (see routes-mapDispatchToProps)
     |_accessible through props:
     |_________this.props.<dispatch declared in mapDispatchToProps>([value])
+
+
+### `../views/pages.js`
+    |_exports pages found inside ../views/pages/
+
+### `../views/pages`
+    |_holds the react pages
+    |_each page have wrapper function and a class
+    |_Wrapper Function
+    |__________ necessary to use react-router hooks
+    |_Class
+    |__________extends React
+    |__________will render the display of the page
+    |__________process the user interaction

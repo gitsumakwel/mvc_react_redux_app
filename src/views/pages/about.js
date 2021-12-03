@@ -14,7 +14,6 @@ class CAbout extends React.Component{
   constructor(props){
     super(props);
     this.state = { x:null};
-
   }
 
   render() {

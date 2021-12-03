@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 /*import App from './App';*/
-import Routex from './Router/routes';
+import Routex from './router/routes';
 
 import * as serviceWorker from './serviceWorker';
 
 
 ReactDOM.render(
-  <React.StrictMode>    
+  <React.StrictMode>
       {/*<App />*/}
       <Routex/>
   </React.StrictMode>,

@@ -10,3 +10,4 @@ export {Project} from './pages/project';
 export {Contact} from './pages/contact';
 export {Home} from './pages/home';
 export {NotFound} from './pages/notfound';
+export {Header} from './pages/header'

@@ -1,7 +1,7 @@
 // Routes
 import React from "react";
-import { Route, Routes , Link, BrowserRouter as Router} from "react-router-dom";
-import { Home, About, Contact, Courseworx, Project, Blog, NotFound } from "../views/pages";
+import { Route, Routes , BrowserRouter as Router} from "react-router-dom"; //removed import: Link (not use)
+import { Home, About, Contact, Courseworx, Project, Blog, Header, NotFound } from "../views/pages";
 import "../index.css";
 import { store } from '../app/store';
 import { connect,Provider } from 'react-redux';
@@ -14,38 +14,15 @@ const DisplayContact = connect(mapStateToProps, mapDispatchToProps)(Contact);
 const DisplayCourseworx = connect(mapStateToProps, mapDispatchToProps)(Courseworx);
 const DisplayProject = connect(mapStateToProps, mapDispatchToProps)(Project);
 const DisplayBlog = connect(mapStateToProps, mapDispatchToProps)(Blog);
-
+const DisplayHeader = connect(mapStateToProps, mapDispatchToProps)(Header);
 
 const Routex = () => {
     return (
         <Provider store={store}>
   				<Router>
             <div>
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                <li>
-                  <Link to="/coursework">Coursework</Link>
-                </li>
-                <li>
-                  <Link to="/project">Project</Link>
-                </li>
-                <li>
-                  <Link to="/blog">Blog</Link>
-                </li>
-                <li>
-                  <Link to="/about">About</Link>
-                </li>
-                {/* contact will be floating for all pages*/}
-                <li>
-                  <Link to="/contact">Contact</Link>
-                </li>
-              </ul>
-
+              <DisplayHeader/>
               <hr />
-
-
               <Routes>
                   <Route exact caseSensitive={false} path="/" element={<DisplayHome/>} />
                   <Route exact caseSensitive={false} path="/about" element={<DisplayAbout/>} />

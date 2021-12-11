@@ -1,0 +1,27 @@
+//import { useNavigate } from "react-router-dom";
+//needs to declare history = useNavigate();
+
+//this is inside a react class
+//you need to pass to the class, history
+//<Class {...props} history={history}/>
+<button
+    onClick={() => this.props.history("/about", { from: "About" })}
+>
+    About
+</button>
+
+<button
+    onClick={() => this.props.history("/blog", { from: "Blog" })}
+>
+    Blog
+</button>
+<button
+    onClick={() => this.props.history("/coursework", { from: "Courseworx" })}
+>
+    Coursework
+</button>
+<button
+    onClick={() => this.props.history("/project", { from: "Project" })}
+>
+    Project
+</button>

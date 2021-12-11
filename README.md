@@ -51,3 +51,24 @@
     |__________extends React
     |__________will render the display of the page
     |__________process the user interaction
+
+### `Database`
+    |_`./src/model`
+    |__________generic.js
+    |__________is a class with mongoose functionality    
+    |_______________createsave({data})
+    |__________functions inside the class:
+                    findById(id)
+                    findByCriteria({ field:value,[date:value || [{$gte:value, $lte:value}]] })
+                    findByOptions({ field:value,[date:value || [{$gte:value, $lte:value}]] }, null, {sort:value,limit:value,skip:value})
+                    findAll()
+                    deleteById(id)
+                    deleteByCriteria({ field:value,[date:value || [{$gte:value, $lte:value}]] })
+                    deleteAll()
+    |_________exports: Query
+    |__________How to use:
+    |__________1. const {Query} = require('./src/model/generic')
+    |__________2. create new instance with a mongoose model
+    |_______________const query = new Query(Model)
+    |__________3. query.findById(id)
+    |_______________result: null || {_id:id, field:value, ...}

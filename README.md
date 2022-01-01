@@ -55,9 +55,9 @@
 ### `Database`
     |_`./src/model`
     |__________generic.js
-    |__________is a class with mongoose functionality    
-    |_______________createsave({data})
+    |__________is a class with mongoose functionality        
     |__________functions inside the class:
+                    createsave({data})
                     findById(id)
                     findByCriteria({ field:value,[date:value || [{$gte:value, $lte:value}]] })
                     findByOptions({ field:value,[date:value || [{$gte:value, $lte:value}]] }, null, {sort:value,limit:value,skip:value})
@@ -65,6 +65,7 @@
                     deleteById(id)
                     deleteByCriteria({ field:value,[date:value || [{$gte:value, $lte:value}]] })
                     deleteAll()
+    |_see `./src/model/mongtools` to help with the creattion of criteria and options object
     |_________exports: Query
     |__________How to use:
     |__________1. const {Query} = require('./src/model/generic')
@@ -72,3 +73,10 @@
     |_______________const query = new Query(Model)
     |__________3. query.findById(id)
     |_______________result: null || {_id:id, field:value, ...}
+
+    |_Models
+    |__________`./src/model/blogs.js`, export: {Blogs}
+    |__________`./src/model/comments.js`, export: {Comments}
+    |__________`./src/model/projects.js`, export: {Projects}
+    |__________`./src/model/works.js`, export: {Works}
+    |__________`./src/model/users.js`, export: {Users}

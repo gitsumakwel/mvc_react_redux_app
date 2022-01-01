@@ -1,0 +1,42 @@
+.wtop_text {
+    letter-spacing: 2px;
+    color: #121111;
+    font-size: 30px;
+}
+
+.works_label {
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.works_content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 30px;
+    grid-row-gap: 75px;
+}
+
+.works_desc {
+    display: grid;
+    grid-row-gap: 25px;
+}
+
+.works_img {
+    width: 100%;
+    height: 180px;
+    background: #deddd5;
+}
+
+.works_top {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 1fr;
+}
+
+.works_bottom {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 1fr;
+}

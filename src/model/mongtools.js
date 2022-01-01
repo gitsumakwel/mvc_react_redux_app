@@ -56,4 +56,5 @@ module.exports = {
   queryOptions,
   regex,
   regexi,
+  objOrNull,
 }

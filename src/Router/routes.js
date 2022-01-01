@@ -2,7 +2,7 @@
 import React from "react";
 import { Route, Routes , BrowserRouter as Router} from "react-router-dom"; //removed import: Link (not use)
 import { Home, About, Contact, Courseworx, Project, Blog, Header, NotFound } from "../views/pages";
-import "../index.css";
+import "../css/index.css";
 import { store } from '../app/store';
 import { connect,Provider } from 'react-redux';
 import {mapStateToProps} from '../app/state';
@@ -29,7 +29,7 @@ const Routex = () => {
                   <Route exact caseSensitive={false} path="/blog" element={<DisplayBlog/>} />
                   <Route exact caseSensitive={false} path="/contact" element={<DisplayContact/>} />
                   <Route exact caseSensitive={false} path="/coursework" element={<DisplayCourseworx/>} />
-                  <Route exact caseSensitive={false} path="/project" element={<DisplayProject/>} />
+                  <Route exact caseSensitive={false} path="/project" element={<DisplayProject/>} />                  
                   <Route exact path="*" element={<NotFound/>} />
               </Routes>
             </div>

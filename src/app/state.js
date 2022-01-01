@@ -1,9 +1,9 @@
 //states and mapStateToProps
 const statusState = {
-  inputcourseworx: 0,
-  inputabout: 0,
-  inputproject: 0,
-  inputblog: 0,
+  inputcourseworx: null,
+  inputabout: null,
+  inputproject: null,
+  inputblog: null,
   togglecontact: false,
 }
 

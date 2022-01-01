@@ -7,8 +7,14 @@ const bodyParser = require('body-parser')
 //const { format, parseISO } = require('date-fns')
 const { connector } = require('./src/database')
 const { decode } = require('./src/obfs')
+const fsLibrary  = require('fs')
 const { randomkey } = require('./src/randomkey')
+
 const {
+  //check for keys in an object
+  //return null for non keys or obj
+  objOrNull,
+
   //{date:date} | {to:date, from:date}
   //result: {date: {$gte:fromDate, $lte:toDate}} | {date: date}
   criteriaDate,
@@ -34,6 +40,27 @@ const {
   regexi,
 } = require('./src/model/mongtools')
 
+let storedData = {}
+let storedPage = 0
+let storedCategory = []
+
+//a class with mongoose functionality to create, to query, and to remove
+//need to pass a mongoose model
+const { Query } = require('./src/model/generic')
+//{title,desc,summary,content,author,thumb,like,dislike,lastupdate,created}
+const { Blogs } = require('./src/model/blogs')
+//{blog,name,email,message,lastupdate,created}
+const { Comments } = require('./src/model/comments')
+//{title,desc,url,thumb,lastupdate,created}
+const { Works } = require('./src/model/works')
+//{title,desc,summary,thumb,url,lastupdate,created}
+const { Projects } = require('./src/model/projects')
+//{wpid,context}
+const { Categories } = require('./src/model/categories')
+//{name,email,message}
+const { Messages } = require('./src/model/messages')
+
+//use for testing
 const populateDB = async() => {
   Categories.collection.drop();
   Comments.collection.drop();
@@ -74,7 +101,16 @@ const populateDB = async() => {
   //{title,desc,summary,content,author,thumb,like,dislike,lastupdate,created}
   const newblog = [];
   for (let i=0;i<MAX;i++)  {
-    newblog.push( await queryBlog.createsave({title:'sample blog '+i,desc:'description for blog '+i,summary:'summary for blog '+i,content:'content sample blog '+i,author:'brill',thumb:'image'+i+'.jpg'}) )
+    const blog = await queryBlog.createsave({title:'sample blog '+i,desc:'description for blog '+i,summary:'summary for blog '+i,content:'content sample blog '+i,author:'brill',thumb:'image'+i+'.jpg'})
+    const number = Math.floor(Math.random()*(4))+1;
+    for (let ind=0;ind<number;ind++) {
+      const item = category[ Math.floor(Math.random()*(category.length-1))+1 ];
+      const found = await queryCategory.findByCriteria({wpid:blog.id,context:item})
+      if (found.length===0) {
+        await queryCategory.createsave({wpid:blog.id,context:item})
+      }else console.log('found:',blog.id,'item:',item )
+    }
+    newblog.push( blog )
   }
 
   //console.log(newblog[0]);
@@ -94,35 +130,16 @@ const populateDB = async() => {
     const project = await queryProject.createsave({title:'sample project '+i,desc:'description for project '+i,summary:'summary for project '+i,thumb:'image'+i+'.jpg',url:'https://project'+i+'url.com'})
     const number = Math.floor(Math.random()*category.length)+3;
     for (let ind=0;ind<number;ind++) {
-      const item = category[ Math.floor(Math.random()*category.length) ];
+      const item = category[ Math.floor(Math.random()*(category.length-1))+1 ];
       const found = await queryCategory.findByCriteria({wpid:project.id,context:item})
       if (found.length===0) {
         await queryCategory.createsave({wpid:project.id,context:item})
-      }else console.log('found:',project.id,'item:',item )
+      }
     }
   }
 }
 
-//a class with mongoose functionality to create, to query, and to remove
-//need to pass a mongoose model
-const { Query } = require('./src/model/generic')
-//{title,desc,summary,content,author,thumb,like,dislike,lastupdate,created}
-const { Blogs } = require('./src/model/blogs')
-//{blog,name,email,message,lastupdate,created}
-const { Comments } = require('./src/model/comments')
-//{title,desc,url,thumb,lastupdate,created}
-const { Works } = require('./src/model/works')
-//{title,desc,summary,thumb,url,lastupdate,created}
-const { Projects } = require('./src/model/projects')
-//{wpid,context}
-const { Categories } = require('./src/model/categories')
-
-class Final extends Object{
-  constructor(){
-    super();
-    this.result = undefined;
-  }
-}
+//populateDB();
 
 
 //log all request
@@ -151,40 +168,167 @@ const index = (req, res) => {
   res.sendFile(__dirname + '/src/views/dummy/index.html')
 }
 
+const mergeCategory = async (data,category) => {
+  data = await data.map(item => {
+    const c = category.filter(citem =>citem.id === item._id)
+    
+    if (c.length>0)item.category = c[0].category
+    return item
+  })      
+  return data
+}
 
-//fetchData
-const fetchData = async (req,res) =>{
+const sendData = async (req,res) => {
   //req.body:
-  //
   // {serial:auth,type:encrypteddata}
-  /* encrypteddata = 'type'
-  */
-  //body needs to have authentication
-  //
 
+  //req.query:
+  //req.query.page
   const serial = req.body.serial;
   let type = req.body.type;
-
   type = await decode(type,serial);
+  
+  const fdata = JSON.parse(req.fdata)
+  let withCategory  = null
   switch (type) {
-    case 'home':
-      //use this to populate DB
-      //await populateDB()
-
-      //now create an api to get part of each db: works, project, blog
-
-      res.json({ express: type });
+    case 'home':  
+      res.json(fdata);
+      break;
+    case 'blog':
+      withCategory = await mergeCategory(fdata.blogs,fdata.category)
+      res.json({blog : withCategory});
+      break;
+    case 'project':
+      withCategory = await mergeCategory(fdata.projects,fdata.category)
+      res.json({project : withCategory});
+      break;
+    case 'work':
+      // console.log('work',fdata.works, 'work',fdata.category)
+      withCategory = await mergeCategory(fdata.works,fdata.category)
+      // console.log('=======>',withCategory)
+      res.json({work : withCategory});
+      break;
+    case 'category':
+      res.json(req.fdata.category);
       break;
     default:
-      res.json({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
+      res.json({ message:"server is busy at the moment" });
       break;
   }
-
 }
-app.route('/api/page/latest').post(fetchData);
+
+const fetchCategory = async (id) => {
+  let fdata = {}
+  let query = new Query(Categories);
+  let category = await query.findByCriteria({wpid:id});
+
+  //no category for wpid
+  if (category === []) return null
+
+  category = await category.map(category => `${category.context}`)
+  storedCategory.push({wpid:id, context:category})
+  return category
+}
+const attachCategory = async (list) => {
+  const xlist = Object.assign([],list)
+  const category = []
+  for (let i=0;i<list.length;i++){
+    const id = xlist[i].id;
+    category.push({id:id,category:await fetchCategory(id)})
+        
+  }
+  return category
+}
+//called from checkData
+//if cache (storedData) data do not exist
+//or storedPage is less than page requested
+const fetchData = async (page) =>{
+  const SKIP = 4;
+  let fdata = {};
+  //set options for find
+  const options = queryOptions({created: "descending"},SKIP,SKIP * page)
+
+  const category = []
+  let c = null;
+  let query = new Query(Blogs);
+    fdata.blogs = await query.findByOptions({},options);
+    c = await attachCategory(fdata.blogs)
+    category.push(...c)
+    
+  query = new Query(Works);
+    fdata.works = await query.findByOptions({},options);
+    c = await attachCategory(fdata.works)
+    category.push(...c)
+    
+  query = new Query(Projects);
+    fdata.projects = await query.findByOptions({},options);
+    c = await attachCategory(fdata.projects)
+    category.push(...c)   
+
+  fdata.category = category;
+  query = new Query(Comments);
+    const comments = [];
+    for (let i = 0; i < fdata.blogs.length; i++) {
+      comments.push( {
+        blog:fdata.blogs[i].id,
+        comments: await query.findByCriteria({blog:fdata.blogs[i].id})});
+    }
+    fdata.comments = comments;
+
+  //store in a variable for server use
+  if (page === 0)storedData = JSON.stringify(Object.assign({},fdata))
+
+  //should append if page is > storedPage
+  else if (page > storedPage) {
+    const xstoredData = Object.assign({},JSON.parse(storedData));
+      xstoredData.blogs = [...xstoredData.blogs,...fdata.blogs]
+      xstoredData.works = [...xstoredData.works,...fdata.works];
+      xstoredData.projects = [...xstoredData.projects,...fdata.projects];
+      xstoredData.comments = [...xstoredData.comments,...fdata.comments];
+      storedData = JSON.stringify(xstoredData);
+      storedPage = page;
+  }
+
+  //store in a file for reference in case of a problem
+
+  await fsLibrary.writeFile(__dirname + '/data.txt', storedData, (error) => {
+    // In case of a error throw err exception.
+    if (error) throw err;
+  })
+  //read the file
+  //await fsLibrary.readFile(__dirname + '/data.txt',callback)
+  // console.log(storedData)
+  return storedData
+}
+
+//first action for '/api/page/latest'
+const checkData = async (req,res,next) => {
+  const page = Number.parseInt(req.query.page);
+  if (objOrNull(storedData)===null || page > storedPage){
+    req.fdata = await fetchData(page)
+    //console.log('checkData-fetch',req.fdata)
+    next()
+  } else {
+    //console.log('checkData-stored',storedData)
+    req.fdata = storedData
+    next()
+  }
+}
+
+const sendMessage = async (req,res) => {
+  const query = new Query(Messages);
+  const serial = req.body.serial;
+  const name = await decode(req.body.name,serial);
+  const email = await decode(req.body.email,serial);
+  const message = await decode(req.body.message,serial);
+  const result = await query.createsave({name:name,email:email,message:message});
+  console.log('received message')
+  res.json({status:await objOrNull(result)!==null?'success':'error'})
+}
+
+app.route('/api/page/latest').post(checkData).post(sendData);
+app.route('/api/message').post(sendMessage);
 app.route('*').get(index).post(index);
-
-
 
 const listener = app.listen(process.env.PORT || 5000, () => {
   console.log('Your app is listening on port ' + listener.address().port)

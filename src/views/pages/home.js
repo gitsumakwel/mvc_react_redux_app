@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom"
 import { fetchData, mergeSortLimit, submitMessage } from './pagehelper'
 import { format }  from 'date-fns'
 import $ from 'jquery'
+import { tilter } from './SimpleTilt'
+
 
 //needs to be declare to all pages
 //change value
@@ -157,6 +159,13 @@ class CHome extends React.Component{
     this.home_update_data();
 
      document.getElementById('message_form').addEventListener('submit',this.sendMessage,false);
+     tilter('.home_top',{
+      perspective: 1000, // Default 400
+      maxTilt: 20, // Default 4
+      mantain: false, // Default false
+      fx3d: true, // Default false
+      fxDistance: 120, // Default 40
+    })
   }
 
   render() {
@@ -165,7 +174,7 @@ class CHome extends React.Component{
 
          {/*<SplitText initialPose="exit" pose="enter" charPoses={charPoses}>Welcome Home</SplitText>*/}
             <div className="home_top font_home">
-              <div className="home_content">
+              <div className="home_content fx3d">
                 <div className="font_vidaloka htop_text">
                   <div className="htop_first center_text">
                     <div><h1>Frontend</h1></div>

@@ -25,13 +25,18 @@ class CHeader extends React.Component{
   }
 
   displayHeader = () => {
-    $('#cheaderxl').css('display','grid');
+    $('#cheaderxl').css('display','grid')
+    .css('width',this.state.appwidth);
     $('#cheaderxs').css('display','none');
     $('.menubtn').css('display','none');
+
     $('#headerpage')
-       .css('grid-template-columns','1fr 460px 1fr')
+       .css('grid-template-columns','1fr')
        .css('grid-template-rows','1fr')
        .css('width',this.state.appwidth);
+
+    
+
     if (this.state.appwidth<=500) {
       $('#cheaderxl').css('display','none');
       $('#cheaderxs').css('display','grid')
@@ -78,27 +83,26 @@ class CHeader extends React.Component{
             <div className="menuburger"></div>
           </div>
           <ul id='cheaderxl'>
-            <li>
-              <Link to="/"><p>Home</p></Link>
+            <li className='header_namae font_waterfall'>            
+              <Link to="/about"><p>Brill Jasper Rayel</p></Link>            
+            </li>
+            <li className="li_home">
+              <Link to="/" className="anima_under_link"><p>Home</p></Link>
             </li>
             <li>
-              <Link to="/coursework"><p>Coursework</p></Link>
+              <Link to="/coursework" className="anima_under_link"><p>Coursework</p></Link>
             </li>
             <li>
-              <Link to="/project"><p>Project</p></Link>
+              <Link to="/project" className="anima_under_link"><p>Project</p></Link>
             </li>
             <li>
-              <Link to="/blog"><p>Blog</p></Link>
-            </li>
-            <li>
-              <Link to="/about"><p>About</p></Link>
-            </li>
-            {/* contact will be floating for all pages*/}
-            <li>
-              <Link to="/contact"><p>Contact</p></Link>
+              <Link to="/blog" className="anima_under_link"><p>Blog Post</p></Link>
             </li>
           </ul>
           <ul id='cheaderxs'>
+            <li>
+              <Link to="/about">Brill Jasper Rayel</Link>
+            </li>
             <li className='spacetop'>
               <Link to="/">Home</Link>
             </li>
@@ -109,11 +113,9 @@ class CHeader extends React.Component{
               <Link to="/project">Project</Link>
             </li>
             <li>
-              <Link to="/blog">Blog</Link>
+              <Link to="/blog">Blog Post</Link>
             </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
+
             {/* contact will be floating for all pages*/}
             <li>
               <Link to="/contact">Contact</Link>

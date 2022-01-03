@@ -66,6 +66,7 @@
             vars.forEach((vitem,index) => {
                 if (index>0) message += '\n'
                 message += `%c${msg[index]}: `
+                //console.log(vitem)
                 if (vitem.isArray || vitem.isObject || vitem.isString || vitem.isBool || vitem.isNumber) 
                     message += `%c${JSON.stringify(vitem,null,2)}`
 

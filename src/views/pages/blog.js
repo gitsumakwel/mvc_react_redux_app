@@ -12,8 +12,9 @@ import React from "react";
 //the class is wrap inside a function
 import { useNavigate } from "react-router-dom";
 //need to declare the 2 const below
-import { checkDataIfLatest } from './pagehelper'
+import { checkDataIfLatest,hasClass,addClass,removeClass } from './pagehelper'
 import {format} from 'date-fns'
+
 //needs to be declare to all pages
 //change value
 const DATACACHE = 'data'
@@ -36,7 +37,9 @@ class CBlog extends React.Component{
       category: [],
       year: [],
       month: [],
-      filter: null,
+      filterCategory: [],
+      filterYear: [],
+      filterMonth: [],
     };
   }
 
@@ -72,6 +75,7 @@ class CBlog extends React.Component{
     const setcategory = new Set()
     const setyear = new Set()
     const setmonth = new Set()
+    //console.log(data)
     data.forEach(item => {
       const date = new Date(item.created)
       const fdate = format(date,'yyyy')
@@ -83,7 +87,7 @@ class CBlog extends React.Component{
       setmonth.add(mdate)
     })
     
-    log(['category','year','month'],[setcategory,setyear,setmonth])
+    //log(['category','year','month'],[setcategory,setyear,setmonth])
 
     this.setState({
       category:[...setcategory],
@@ -96,7 +100,7 @@ class CBlog extends React.Component{
   async blogs_update_data() {
     //use for testing
     //this will remove cache
-    window.localStorage.removeItem(CACHE)
+    //window.localStorage.removeItem(CACHE)
 
     //check cache for data
     //data exists: check for update
@@ -117,14 +121,15 @@ class CBlog extends React.Component{
           return item
         })    
         
-        window.localStorage.setItem(CACHE,JSON.stringify({blog: blogs}))
+        window.localStorage.setItem(CACHE,JSON.stringify({blog: blogs})) 
         
       }      
     } else {
       blogs = JSON.parse(cache_data)[PAGE]
       //console.log(CACHE,blogs)
     }
-    this.get_uniques(cache_data!==null?cache_data.blogs:blogs);
+    
+    this.get_uniques(cache_data!==null?JSON.parse(cache_data).blog:blogs);
     await this.setState({update: blogs});
     
         
@@ -144,18 +149,20 @@ class CBlog extends React.Component{
     if (this.state.category.length<=0 || this.state.year.length<=0 || this.state.month.length<=0){
       return (<>Filter</>)
     }else {
-      category = category.map(item=><button key={item}>{item}</button>)
-      year = year.map(item=><button key={item}>{item}</button>)
-      month = month.map(item=><button key={item}>{item}</button>)
+      
+      category = category.map(item=><button key={item} id={item.split(' ').join('')}>{item}</button>)
+
+      year = year.map(item=><button key={item} id={item}>{item}</button>)
+      month = month.map(item=><button key={item} id={item}>{item}</button>)
       return (
         <>
-          <div key='category'>
+          <div key='category' id='category'>
             {category}
           </div>
-          <div key='year'>
+          <div key='year' id='year'>
             {year}
           </div>
-          <div key='month'>
+          <div key='month' id='month'>
             {month}
           </div>
         </>
@@ -163,9 +170,89 @@ class CBlog extends React.Component{
     }
   }
 
-  componentDidMount(){
-    this.blogs_update_data()    
+  filterUpdate = (data,filter=[]) => {
+    //filter category first
+    if (filter === null) return data
+    if (filter.length < 1) return data
     
+    data = data.filter(item =>{      
+      let result = item.category.map(category=>category.split(' ').join(''))
+      result = result.filter(category => filter.indexOf(category)>-1)
+      return (result.length>0)?true:false
+    })
+    
+    return data
+  }
+
+  filterUpdateByYear = (data,filter=[]) => {
+     //filter category first
+     if (filter === null) return data
+     if (filter.length < 1) return data
+
+     data = data.filter(item => {
+       const year = format(new Date(item.created),'yyyy')
+       return filter.indexOf(year)>-1?true:false;
+     })
+     return data
+  }
+  filterUpdateByMonth = (data,filter=[]) => {
+    //filter category first
+    if (filter === null) return data
+    if (filter.length < 1) return data
+
+    data = data.filter(item => {
+      const month = format(new Date(item.created),'MMM')
+      return filter.indexOf(month)>-1?true:false;
+    })
+    return data
+ }
+
+  toggleFilter = async (filter,target) => {
+    let filt = await Object.assign([],filter)        
+        const index = filt.indexOf(target)        
+        if ( (index > 0) && (index < (filt.length - 1)) ) filt = [...filt.slice(0,index),...filt.slice(index+1)]
+        else if (index === 0) filt.shift()
+        else if (index === filt.length-1 && index > -1) filt.pop()
+        else {
+          
+          filt.push(target)        
+        }   
+    return filt
+  }
+  
+  
+  async componentDidMount(){
+    await this.blogs_update_data()    
+    //key events on button    
+    const btn_event_category = async(event) => {
+        event.target.classList.toggle('filter_btn')       
+        //add category to state
+        let filt = await this.toggleFilter(this.state.filterCategory,event.target.id)             
+        await this.setState({filterCategory: filt})
+    }
+    const btn_event_year = async(event) => {
+      event.target.classList.toggle('filter_btn')       
+      let filt = await this.toggleFilter(this.state.filterYear,event.target.id)     
+      //add year to state
+      await this.setState({filterYear: filt})
+    }
+    const btn_event_month = async(event) => {
+      event.target.classList.toggle('filter_btn')       
+
+      let filt = await this.toggleFilter(this.state.filterMonth,event.target.id)      
+      //add month to state
+      await this.setState({filterMonth: filt})
+    }
+
+    this.state.category.forEach(item => {
+      document.getElementById(item.split(' ').join('')).addEventListener('click',btn_event_category,false)
+    })
+    this.state.year.forEach(item => {
+      document.getElementById(item.split(' ').join('')).addEventListener('click',btn_event_year,false)
+    })
+    this.state.month.forEach(item => {
+      document.getElementById(item.split(' ').join('')).addEventListener('click',btn_event_month,false)
+    })
   }
 
   render() {
@@ -178,7 +265,7 @@ class CBlog extends React.Component{
                   <div><h1>Blogs</h1></div>
                 </div>
                 <div className="blog_update">
-                  <div className="">{this.formatter(this.state.update)}</div>
+                  <div className="">{this.formatter(this.filterUpdateByMonth(this.filterUpdateByYear(this.filterUpdate(this.state.update,this.state.filterCategory),this.state.filterYear),this.state.filterMonth))}</div>
                 </div>
               </div>
               <div className="blog_right">

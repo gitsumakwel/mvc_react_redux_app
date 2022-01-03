@@ -71,9 +71,29 @@ const submitMessage = async (name,email,msg) => {
   return response
 }
 
+//https://stackoverflow.com/questions/6787383/how-to-add-remove-a-class-in-javascript
+
+function hasClass(ele,cls) {
+  return !!ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+}
+
+function addClass(ele,cls) {
+  if (!hasClass(ele,cls)) ele.className += " "+cls;
+}
+
+function removeClass(ele,cls) {
+  if (hasClass(ele,cls)) {
+    var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+    ele.className=ele.className.replace(reg,' ');
+  }
+}
+
 export {
   checkDataIfLatest,
   fetchData,
   submitMessage,
   mergeSortLimit,
+  addClass,
+  removeClass,
+  hasClass
 }

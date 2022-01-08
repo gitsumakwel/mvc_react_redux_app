@@ -75,22 +75,22 @@ class CHome extends React.Component{
 
       formatData = formatData.map((item,index) => {       
         const date = new Date(item.created)
-
+        const bgcolor = ['#4D5773','#F6645D','#04D2B4']
         
         return (
           <div className='update_content' style={(index+1)%2===0?update_area['right']:update_area['left']} key={item._id}>
             <div className='update_desc' style={(index+1)%2===0?update_area['areaRight']:update_area['areaLeft']}>
               <div className='update_top'>
-                <div className="update_title"><div className="uc_margin">{item.title}</div></div>
-                <div className="update_created font_small update_date utime"><div className="uc_margin">{format(date,format(date,'yyyy')===format(Date.now(),'yyyy')?'EEE MMM dd':'EEE MMM dd yyyy')}</div></div>
+                <div className="content_title" style={{color:bgcolor[index%bgcolor.length]}}><div className="uc_margin">{item.title.replace(/(\b[a-z])/g,x=>x.toUpperCase())}</div></div>
+                <div className="update_created font_small update_date utime"><div className="uc_margin update_date_elem">{format(date,format(date,'yyyy')===format(Date.now(),'yyyy')?'dd MMM | EEE':'dd MMM yyyy | EEE')}</div></div>
               </div>
-              <div className="update_summary"><div className="uc_margin">{item.summary}</div></div>
+              <div className="content_summary"><div className="uc_margin">{item.summary}</div></div>
               <div className="update_bottom">
                 <div className="update_categories font_small"><div className="uc_margin">{item.category.map((item)=>`#${item}`).join(' ')}</div></div>
                 <div className="visitpage"><div className="uc_margin update_date"><a href={item.url}>visit the page</a></div></div>
               </div>
             </div>
-            <div className="update_img" style={(index+1)%2===0?update_area['areaLeft']:update_area['areaRight']}><img src={item.thumb} alt={"thumbnail for " + item.title} loading="lazy"/></div>
+            <div className="update_img" style={(index+1)%2===0?update_area['areaLeft']:update_area['areaRight']} style={{backgroundColor:bgcolor[index % bgcolor.length]}}><img src={item.thumb} alt={"thumbnail for " + item.title} loading="lazy"/></div>
           </div>
         )
     })
@@ -120,7 +120,6 @@ class CHome extends React.Component{
     //data exists: check for update
     //data not exists: fetch Data from server
     const cache_data = JSON.parse(window.localStorage.getItem(CACHE))
-    
 
     //A -> select only 3 most updates, do not include 'comments'
     let merged_data = []
@@ -129,8 +128,7 @@ class CHome extends React.Component{
       //data => { key: [array], key: [array], ...}
       //exclude => [key, key, ...]
       //mergeSortLimit(container,data,sort,limit,exclude)
-      merged_data = await mergeSortLimit(merged_data,cache_data,-1,3,['comments','category'])     
-      
+      merged_data = await mergeSortLimit(merged_data,cache_data,-1,3,['comments','category'])           
       //find category for each data in merged_data
       for (let i=0;i<merged_data.length;i++){
         const filtered = cache_data.category.filter(item=>item.id===merged_data[i]._id)
@@ -141,15 +139,20 @@ class CHome extends React.Component{
       await this.setState({ update: merged_data })
     }    
     //lets fetch updated data
-    let data = cache_data!==null?await this.checkDataIfLatest(cache_data):await fetchData(PAGE,CACHE)
-
+    let data = cache_data!==null?await this.checkDataIfLatest(cache_data):await fetchData(PAGE,CACHE)  
+    if (cache_data===null||data===null) window.localStorage.setItem(CACHE,JSON.stringify(data))  
     //A
     merged_data = []
     if (data!==null) {
-        merged_data = await mergeSortLimit(merged_data,data,-1,3,['comments'])
+        merged_data = await mergeSortLimit(merged_data,data,-1,3,['comments','category'])        
+
         // merged_data = await this.formatter(merged_data);
         // fdata = await this.formatter(merged_data)
         // $('#fdata').html({fdata})
+        for (let i=0;i<merged_data.length;i++){
+          const filtered = data.category.filter(item=>item.id===merged_data[i]._id)
+          if (filtered.length > 0) merged_data[i].category = filtered[0].category
+        }
        await this.setState({update: merged_data});
      }
   }
@@ -163,9 +166,19 @@ class CHome extends React.Component{
       perspective: 1000, // Default 400
       maxTilt: 20, // Default 4
       mantain: false, // Default false
-      fx3d: true, // Default false
+      fx3d: false, // Default false
       fxDistance: 120, // Default 40
     })
+
+    //TODO:
+    //1.
+    //select all children
+    //add css for animation when on view
+    //fade in when going down
+    //face out when going up (optional)
+    //2.
+    //adjust spacing of sections
+    //must be one screen or more per section
   }
 
   render() {
@@ -187,15 +200,15 @@ class CHome extends React.Component{
             </div>
             <div className="home_update">
               <div className="home_content">
-                <div><h2>UPDATES</h2></div>
-                <div><p>recent activities, projects, writings</p></div>                
+                <div><h2 className="font_title">UPDATES</h2></div>
+                <div><p className="font_subtitle">recent activities, projects, writings</p></div>                
                 {this.formatter(this.state.update)}
               </div>
             </div>
             <div className="home_schema">
               <div className="home_content">
-                <div><h2>SCHEMA</h2></div>
-                <div><p>things you want to know about the site</p></div>
+                <div><h2 className="font_title">SCHEMA</h2></div>
+                <div><p className="font_subtitle">things you want to know about the site</p></div>
                 <div className="schema_content_row">
                   <div className="schema_div"><div className="schema_content_col">
                     <div className="uc_margin schema_col_start">Coursework</div>
@@ -214,8 +227,8 @@ class CHome extends React.Component{
             </div>
             <div className="home_message">
               <div className="home_content">
-                <div><h2>Message</h2></div>
-                <div><p>send me your inquiries</p></div>
+                <div><h2 className="font_title">Message</h2></div>
+                <div><p className="font_subtitle">send me your inquiries</p></div>
                 <div className="message_content uc_margin">
                   <form id="message_form">
                   <div className="message_form_content">

@@ -57,8 +57,9 @@ class CCProject extends React.Component{
   async projects_update_data() {
     //use for testing
     //this will remove cache
-    //window.localStorage.removeItem(CACHE)
-
+    // window.localStorage.removeItem(CACHE)
+    
+    // window.localStorage.removeItem('data')
     //check cache for data
     //data exists: check for update
     //data not exists: fetch Data from server

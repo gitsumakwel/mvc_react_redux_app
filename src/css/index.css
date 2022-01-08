@@ -45,8 +45,33 @@ code {
 }
 
 .font_inter {
+  font-family: "Inter", sans-serif;
 }
 
+.font_title {
+  font-size: 35px;
+  margin-bottom: 0px;
+}
+
+.font_subtitle {
+  font-family: "Lato", sans-serif;
+  font-size: 25px;
+  margin-top: 0px;
+}
+
+.font_small {
+  font-size: 13px;
+  color: #494949;
+  font-weight: 400;
+}
+
+.content_title {
+  font-size: 25px;
+  font-weight: 600;
+}
+.content_summary {
+  font-size: 20px;
+}
 #headerpage {
   display: grid;
   grid-template-columns: 1fr;
@@ -112,7 +137,8 @@ code {
   margin-left: 35px;
 }
 
-#cheaderxl a:-webkit-any-link {
+/* #cheaderxl a:-webkit-any-link { */
+#cheaderxl a {
   text-decoration: none;
   position: relative;
 }
@@ -149,7 +175,8 @@ code {
   margin-top: 30px;
 }
 
-#cheaderxs a:-webkit-any-link {
+/* #cheaderxs a:-webkit-any-link { */
+#cheaderxs a{
   color: white;
   display: flex;
   background-color: rgb(211, 244, 119);
@@ -159,8 +186,8 @@ code {
   justify-content: center;
   margin: 0px;
 }
-
-#cheaderxs a:-webkit-any-link:hover {
+/* #cheaderxs a:-webkit-any-link:hover { */
+#cheaderxs a:hover {
   color: white;
   background-color: rgb(119, 176, 244);
 }

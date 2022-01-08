@@ -5,11 +5,7 @@
 }
 
 .font_home {
-  font-size: 16px;
-}
-
-.font_small {
-  font-size: 13px;
+  font-size: 20px;
 }
 
 .word_break {
@@ -50,10 +46,12 @@ pre {
 .home_content {
   width: 950px;
   /*border: 1px solid #000;*/
+  padding-top: calc(var(--homeMargin) * 2.5);
+  padding-bottom: calc(var(--homeMargin) * 1.5);
 }
 
 .home_top,
-.home_udpate,
+.home_update,
 .home_schema {
   display: flex;
   align-items: center;
@@ -64,7 +62,7 @@ pre {
 }
 
 .home_top {
-  height: 750px;
+  height: 850px;
   width: inherit;
 }
 
@@ -72,7 +70,16 @@ pre {
 .home_schema,
 .home_message {
   height: auto;
-  padding-top: var(--homePadding);
+}
+.home_update {
+  background-color: #fff;
+}
+
+.home_schema {
+  background-color: #fff;
+}
+.home_message {
+  height: 750px;
 }
 
 .center_text {
@@ -116,8 +123,6 @@ pre {
 
 .home_content > div > h2 {
   color: #121111;
-  margin-bottom: 0px;
-  margin-top: calc(var(--homeMargin) * 1.25);
 }
 
 .update_content {
@@ -125,7 +130,7 @@ pre {
   grid-template-areas: "left right";
   margin-top: 90px;
   grid-column-gap: 5px;
-  height: auto;
+  height: 450px;
   /*background: #6385ad;*/
 }
 
@@ -139,13 +144,25 @@ pre {
 
 .update_desc {
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: 20% 1fr 20%;
   align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  line-height: 30px;
 }
 
 .update_date {
   display: flex;
   justify-content: flex-end;
+  overflow-x: hidden !important;
+}
+
+.uc_margin {
+  margin-left: 30px;
+  margin-right: 10px;
+}
+/* flip */
+.update_date_elem {
 }
 
 .update_top {
@@ -160,7 +177,7 @@ pre {
 
 .update_img {
   width: 100%;
-  height: 200px;
+  height: 100%;
   /*background-color: #bab8b9;*/
   display: flex;
   align-items: center;
@@ -169,11 +186,6 @@ pre {
 
 .update_img > img {
   display: span;
-}
-
-.uc_margin {
-  margin-left: 30px;
-  margin-right: 10px;
 }
 
 .bottom_margin {
@@ -201,10 +213,6 @@ pre {
 
 .schema_col_start {
   grid-column-start: 2;
-}
-
-.home_message {
-  height: 500px;
 }
 
 .message_form_content {

@@ -102,6 +102,7 @@ class CBlog extends React.Component{
     //this will remove cache
     //window.localStorage.removeItem(CACHE)
 
+    //window.localStorage.removeItem('data')
     //check cache for data
     //data exists: check for update
     //data not exists: fetch Data from server
@@ -129,8 +130,10 @@ class CBlog extends React.Component{
       //console.log(CACHE,blogs)
     }
     
-    this.get_uniques(cache_data!==null?JSON.parse(cache_data).blog:blogs);
-    await this.setState({update: blogs});
+    if (cache_data!==null) {
+      this.get_uniques(cache_data!==null?JSON.parse(cache_data).blog:blogs);
+      await this.setState({update: blogs});
+    }
     
         
     //check for update

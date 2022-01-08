@@ -15,7 +15,7 @@
       if (conf.fx3d) {
         for (const child of item.children) {
           if (child.classList.contains('fx3d')) {
-            child.setAttribute('style', `transform: translateZ(${conf.fxDistance}px) scale(1);`)
+            child.setAttribute('style', `transform: translateZ(${conf.fxDistance}px) scale(.9);`)
           }
         }
       }

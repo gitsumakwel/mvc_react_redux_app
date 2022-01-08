@@ -73,7 +73,7 @@ class CHeader extends React.Component{
     this.displayHeader();
     $(window).resize(this.windowResize);
     $('.menubtn').click(this.burgerClick);
-    $('#cheaderxs > li > a:-webkit-any-link').click(this.burgerClick);
+    $('#cheaderxs > li > a').click(this.burgerClick);
   }
 
   render() {

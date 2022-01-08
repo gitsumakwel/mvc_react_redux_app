@@ -191,19 +191,22 @@ const sendData = async (req,res) => {
   const fdata = JSON.parse(req.fdata)
   let withCategory  = null
   switch (type) {
-    case 'home':  
+    case 'home':        
       res.json(fdata);
       break;
     case 'blog':
       withCategory = await mergeCategory(fdata.blogs,fdata.category)
+      console.log(withCategory)
       res.json({blog : withCategory});
       break;
     case 'project':
       withCategory = await mergeCategory(fdata.projects,fdata.category)
+      console.log(withCategory)
       res.json({project : withCategory});
       break;
     case 'work':
       // console.log('work',fdata.works, 'work',fdata.category)
+      console.log(withCategory)
       withCategory = await mergeCategory(fdata.works,fdata.category)
       // console.log('=======>',withCategory)
       res.json({work : withCategory});

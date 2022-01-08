@@ -15,16 +15,17 @@ const fetchData = async (page,cache) => {
 
   await $.post('/api/page/latest?page=0',body,(data,status,xhr)=>{
     if (status==="success") {
-      fdata = data      
+      fdata = data         
     }
   })
-
+  // console.log(fdata)
   return fdata
 }
 
 const checkDataIfLatest = async (page,cache) => {
-  const cache_data = JSON.parse(window.localStorage.getItem(cache))[page]
-  //console.log('check',page,cache_data)
+  
+  let cache_data = JSON.parse(window.localStorage.getItem(cache))
+  if(cache_data!==null)cache_data = cache_data[page]
   
   let fdata = await fetchData(page,cache)
   

@@ -19,21 +19,21 @@ const DisplayHeader = connect(mapStateToProps, mapDispatchToProps)(Header);
 const Routex = () => {
     return (
         <Provider store={store}>
-  				<Router>
-            <div>
-              <DisplayHeader/>
-              <hr />
-              <Routes>
-                  <Route exact caseSensitive={false} path="/" element={<DisplayHome/>} />
-                  <Route exact caseSensitive={false} path="/about" element={<DisplayAbout/>} />
-                  <Route exact caseSensitive={false} path="/blog" element={<DisplayBlog/>} />
-                  <Route exact caseSensitive={false} path="/contact" element={<DisplayContact/>} />
-                  <Route exact caseSensitive={false} path="/coursework" element={<DisplayCourseworx/>} />
-                  <Route exact caseSensitive={false} path="/project" element={<DisplayProject/>} />                  
-                  <Route exact path="*" element={<NotFound/>} />
-              </Routes>
-            </div>
-  				</Router>
+            <Router>
+                <div>
+                    <DisplayHeader/>
+                    <hr />
+                    <Routes>
+                        <Route exact caseSensitive={false} path="/" element={<DisplayHome/>} />
+                        <Route exact caseSensitive={false} path="/about" element={<DisplayAbout/>} />
+                        <Route exact caseSensitive={false} path="/blog" element={<DisplayBlog/>} />
+                        <Route exact caseSensitive={false} path="/contact" element={<DisplayContact/>} />
+                        <Route exact caseSensitive={false} path="/coursework" element={<DisplayCourseworx/>} />
+                        <Route exact caseSensitive={false} path="/project" element={<DisplayProject/>} />                  
+                        <Route exact path="*" element={<NotFound/>} />
+                    </Routes>
+                </div>
+            </Router>
         </Provider>
 
     );

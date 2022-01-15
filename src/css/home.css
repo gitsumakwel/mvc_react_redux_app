@@ -151,7 +151,7 @@ pre {
   line-height: 30px;
 }
 
-.update_date {
+.flex_end_hidden {
   display: flex;
   justify-content: flex-end;
   overflow-x: hidden !important;
@@ -162,8 +162,6 @@ pre {
   margin-right: 10px;
 }
 /* flip */
-.update_date_elem {
-}
 
 .update_top {
   display: grid;
@@ -195,20 +193,49 @@ pre {
 .schema_content_row {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
+  position: relative;
 }
 
 .schema_div {
   margin-top: 50px;
+  --color1: #eb8bff;
+  --color2: #7eeefa;
+  position: relative;
+  overflow: hidden;
+  display: block;
+  transform-origin: center;
+  z-index: 10;
+  overflow: hidden;
+  transform: translate3d(0, 0, -1px);
 }
 
 .schema_content_col {
   display: grid;
-  grid-template-columns: 100px repeat(3, 1fr);
+  grid-template-columns: 100px repeat(2, 1fr) 100px;
   grid-template-rows: auto;
   /*background-color: #6d8bbe;*/
   align-items: center;
   justify-content: center;
   height: 100px;
+  overflow: hidden;
+}
+.schema_content_col_svg {
+  display: block;
+  position: relative;
+  pointer-events: none;
+  user-select: none;
+  height: 100%;
+  width: 100%;
+}
+.schema_content_col_svg svg {
+  position: absolute;
+  transform: scale(2) translateX(-20px) translateY(60px);
+  user-select: none;
+  transition: transform 400ms;
+  transition-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+.schema_div:hover .schema_content_col_svg svg {
+  transform: scale(2) translateX(20px) translateY(20px);
 }
 
 .schema_col_start {
@@ -260,4 +287,50 @@ pre {
 .visitpage {
   display: flex;
   justify-content: center;
+}
+.visitpage a {
+  text-decoration: none;
+  transition: transform 300ms;
+  transition-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  transform: translateX(20px);
+}
+.visitpage a:hover {
+  transform: translateX(0px);
+}
+
+/* schema_div color-dodge */
+.schema_div:before {
+  content: "";
+  opacity: 1;
+  mix-blend-mode: screen;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-color: #f9f4fa;
+  background-repeat: no-repeat;
+}
+.schema_div:before {
+  background-position: 50% 50%;
+  background-size: 300% 300%;
+  /* animation: holoGradient 15s ease infinite both; */
+
+  mix-blend-mode: color-dodge;
+  opacity: 0.8;
+  filter: brightness(0.75) contrast(1.5);
+}
+.schema_div.active:before {
+  opacity: 1;
+  animation: none;
+  transition: none;
+  background-image: linear-gradient(
+    115deg,
+    transparent 15%,
+    var(--color1) 46%,
+    var(--color2) 54%,
+    transparent 85%
+  );
+  opacity: 0.8;
+  filter: brightness(0.75) contrast(1.5);
 }

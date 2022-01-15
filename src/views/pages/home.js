@@ -82,12 +82,17 @@ class CHome extends React.Component{
             <div className='update_desc' style={(index+1)%2===0?update_area['areaRight']:update_area['areaLeft']}>
               <div className='update_top'>
                 <div className="content_title" style={{color:bgcolor[index%bgcolor.length]}}><div className="uc_margin">{item.title.replace(/(\b[a-z])/g,x=>x.toUpperCase())}</div></div>
-                <div className="update_created font_small update_date utime"><div className="uc_margin update_date_elem">{format(date,format(date,'yyyy')===format(Date.now(),'yyyy')?'dd MMM | EEE':'dd MMM yyyy | EEE')}</div></div>
+                <div className="update_created font_small flex_end_hidden utime"><div className="uc_margin update_date_elem">{format(date,format(date,'yyyy')===format(Date.now(),'yyyy')?'dd MMM | EEE':'dd MMM yyyy | EEE')}</div></div>
               </div>
               <div className="content_summary"><div className="uc_margin">{item.summary}</div></div>
               <div className="update_bottom">
                 <div className="update_categories font_small"><div className="uc_margin">{item.category.map((item)=>`#${item}`).join(' ')}</div></div>
-                <div className="visitpage"><div className="uc_margin update_date"><a href={item.url}>visit the page</a></div></div>
+                <div className="visitpage"><div className="uc_margin flex_end_hidden">
+                  <a href={item.url}>visit the page <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up-right" viewBox="0 0 16 16">
+                  <path fillRule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
+                  </svg>
+                  </a>
+                </div></div>
               </div>
             </div>
             <div className="update_img" style={(index+1)%2===0?update_area['areaLeft']:update_area['areaRight']} style={{backgroundColor:bgcolor[index % bgcolor.length]}}><img src={item.thumb} alt={"thumbnail for " + item.title} loading="lazy"/></div>
@@ -179,6 +184,37 @@ class CHome extends React.Component{
     //2.
     //adjust spacing of sections
     //must be one screen or more per section
+
+
+
+    var $cards = $(".schema_div");
+    var $style = $(".hover");
+    $cards.on("mousemove", function(e) {
+      var $card = $(this);
+      var l = e.offsetX;
+      var t = e.offsetY;      
+      var h = $card.height();
+      var w = $card.width();
+      var lp = Math.abs(Math.floor(100 / w * l)-100);
+      var tp = Math.abs(Math.floor(100 / h * t)-100);
+      var lp2 = (50 - (Math.abs(Math.floor(100 / w * l)-100))/10)+5;
+      var tp2 = (50 - (Math.abs(Math.floor(100 / h * t)-100))/10)+5;
+       var ty = (tp - 50)/2;
+       var tx = ((lp - 50) * .5) * -1;
+      var bg = `background-position: ${lp}% ${tp}%;`
+      var bg2 = `background-position: ${lp2}% ${tp2}%;`      
+      var tf = `transform: rotateX(${ty}deg) rotateY(${tx}deg)`
+      var style = `
+        .schema_div.active:before { ${bg} }`
+        /* .schema_div.active:after { ${bg2} 
+        .schema_div.active { ${tf} }
+      ` */
+      $cards.removeClass("active");
+      $card.addClass("active");
+      $style.html(style);
+    }).on("mouseout", function() {
+      $cards.removeClass("active");
+    });
   }
 
   render() {
@@ -211,18 +247,35 @@ class CHome extends React.Component{
                 <div><p className="font_subtitle">things you want to know about the site</p></div>
                 <div className="schema_content_row">
                   <div className="schema_div"><div className="schema_content_col">
-                    <div className="uc_margin schema_col_start">Coursework</div>
-                    <div className="uc_margin">work accomplished from rigorous study or practice</div>
+                    <div className="uc_margin schema_col_start content_title">Coursework</div>
+                    <div className="uc_margin content_summary">work accomplished from rigorous study or practice</div>
+                    <div className="schema_content_col_svg">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up-right" viewBox="0 0 16 16">
+                        <path fillRule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
+                      </svg>
+                    </div>
                   </div></div>
                   <div className="schema_div"><div className="schema_content_col">
-                    <div className="uc_margin schema_col_start">Projects</div>
-                    <div className="uc_margin">projects completed for a client or produced with a group</div>
+                    <div className="uc_margin schema_col_start content_title">Projects</div>
+                    <div className="uc_margin content_summary">projects completed for a client or produced with a group</div>
+                    <div className="schema_content_col_svg">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up-right" viewBox="0 0 16 16">
+                        <path fillRule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
+                      </svg>
+                    </div>
+                    
                   </div></div>
                   <div className="schema_div"><div className="schema_content_col">
-                    <div className="uc_margin schema_col_start">Blogs</div>
-                    <div className="uc_margin">writings on any interest, especially about software development</div>
+                    <div className="uc_margin schema_col_start content_title">Blogs</div>
+                    <div className="uc_margin content_summary">writings on any interest, especially about software development</div>
+                    <div className="schema_content_col_svg">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up-right" viewBox="0 0 16 16">
+                        <path fillRule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
+                      </svg>
+                    </div>
                   </div></div>
                 </div>
+                <style className='hover'></style>
               </div>
             </div>
             <div className="home_message">
@@ -233,12 +286,15 @@ class CHome extends React.Component{
                   <form id="message_form">
                   <div className="message_form_content">
                     <div className="message_client_info">
-                      <input id="name" type="text" name="name" placeholder="name*" />
-                      <input id="email" type="email" name="email" placeholder="email*" />
+                      <input id="name" type="text" name="name" placeholder="name*" className="focusInput"/>
+                      <label className="focusLabel" htmlFor="name">name</label>
+
+                      <input id="email" type="email" name="email" placeholder="email*" className="focusInput"/>
+                      <label className="focusLabel" htmlFor="email">email</label>
                     </div>
                     <div className="message_client_action">
-                      <textarea id="message" name="message" placeholder="message*" cols='50' rows='5'>
-                      </textarea>
+                      <textarea id="message" name="message" placeholder="message*" cols='50' rows='5' className="focusInput"/>
+                      <label className="focusLabel" htmlFor="message">message</label>
                       <input className="message_button" type="submit" value="Submit" />
                     </div>
                   </div>

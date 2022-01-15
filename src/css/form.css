@@ -1,0 +1,53 @@
+/*  inspired by Kevin Canlas
+    https://codepen.io/kvncnls/pen/MWmJaPw
+*/
+.focusLabel {
+  display: block;
+  -webkit-transform: translateX(1rem) translateY(-2rem) scale(1);
+  transform: translateX(1rem) translateY(-2rem) scale(1);
+  color: gray;
+  transform-origin: 0 0;
+  transition: transform 300ms;
+  transition-timing-function: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  pointer-events: none;
+}
+.focusInput {
+  border: 1px solid gray;
+  margin-top: 20px;
+}
+.focusInput:focus + .focusLabel,
+.focusInput:not(:placeholder-shown) + .focusLabel {
+  -webkit-transform: translateX(0rem) translateY(-4.3rem) scale(1.2);
+  transform: translateX(0rem) translateY(-4.3rem) scale(1.2);
+  transform-origin: 0 0; /* Used later for transitions */
+  transition: all 250ms;
+}
+.focusInput::placeholder {
+  display: none;
+  color: transparent;
+  /* Prevents users from highlighting the placeholder. */
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+.adjustLabel {
+  -webkit-transform: translateX(-5.4rem) translateY(-1.7rem) scale(1);
+  transform: translateX(-5.4rem) translateY(-1.7rem) scale(1);
+  transform-origin: 0 0;
+  transition: all 500ms;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  pointer-events: none;
+}
+.focusInput:focus + .adjustLabel,
+.focusInput:not(:placeholder-shown) + .adjustLabel {
+  -webkit-transform: translateX(-5.9rem) translateY(-3.4rem) scale(1.2);
+  transform: translateX(-5.9rem) translateY(-3.4rem) scale(1.2);
+  transform-origin: 0 0; /* Used later for transitions */
+  transition: all 250ms;
+}
+/*end of input focus manipulation*/

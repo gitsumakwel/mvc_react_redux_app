@@ -2,6 +2,8 @@
 @import "works.css";
 @import "projects.css";
 @import "blogs.css";
+@import "form.css";
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -176,7 +178,7 @@ code {
 }
 
 /* #cheaderxs a:-webkit-any-link { */
-#cheaderxs a{
+#cheaderxs a {
   color: white;
   display: flex;
   background-color: rgb(211, 244, 119);
